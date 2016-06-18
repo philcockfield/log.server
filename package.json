@@ -2,7 +2,7 @@
   "name": "js-util-log",
   "version": "1.0.0",
   "description": "A simple and colorful logger abstraction.",
-  "main": "./lib/index.js",
+  "main": "./lib/log.js",
   "scripts": {
     "start": "node .",
     "watch": "nodemon . -e js,jsx --ignore .build",
