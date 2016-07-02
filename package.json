@@ -1,6 +1,6 @@
 {
   "name": "js-util-log",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple and colorful logger abstraction.",
   "main": "./lib/log.js",
   "typings": "./lib/log.d.ts",
