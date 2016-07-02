@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Fixed
 #### Security
 
-## [0.0.1] - YYYY-MM-DD
-#### Added
-Initial creation and publish.
+
+## [1.0.2] - 2016-06-02
+#### Changed
+- Converted to [TypeScript](https://www.typescriptlang.org/).

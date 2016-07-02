@@ -1,10 +1,11 @@
 import { expect } from 'chai';
-import log, { COLORS, METHODS } from '../src/log';
-import chalk from 'chalk';
+import log from '../log';
+import { COLORS, METHODS } from '../log';
+import * as chalk from 'chalk';
 
 
 
-describe('logging to console', function() {
+describe('logging to console (NB: Tests hidden because this mucks with the console)', function() {
   let items;
   let fnLog;
   beforeEach(() => {
@@ -16,6 +17,7 @@ describe('logging to console', function() {
     console.log = fnLog;
     log.silent = false;
   });
+
 
 
   it('logs a single value', () => {
@@ -32,17 +34,12 @@ describe('logging to console', function() {
     log.info('my', 'info');
     log.warn('my', 'warn');
     log.error('my', 'error');
+
     expect(items[0]).to.equal('my info');
     expect(items[1]).to.equal('my warn');
     expect(items[2]).to.contain('my error');
   });
 
-
-  it('logs objects as JSON', () => {
-    const obj = { foo:123 };
-    log.info(obj);
-    expect(items).to.eql([JSON.stringify(obj, null, 2)]);
-  });
 
 
   it('is not silent by default', () => {
@@ -95,5 +92,23 @@ describe('logging to console', function() {
     const red = chalk.red('red');
     log.error('red');
     expect(items[0]).to.equal(red);
+  });
+
+
+  it('converts object to YAML string (with circular reference)', () => {
+    const obj: any = {
+      foo: 123,
+      bar: {
+        one: 1,
+        two: 2,
+      },
+      array: [1, 2, 3],
+    };
+    const ref = { obj };
+    obj.circular = ref;
+    log.info('foo', obj);
+    expect(items[0]).to.contain('&ref_0\n');
+    expect(items[0]).to.contain('foo \n');
+    expect(items[0]).to.contain('foo: 123\n');
   });
 });
