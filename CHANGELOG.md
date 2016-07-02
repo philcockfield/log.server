@@ -10,3 +10,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Removed
 #### Fixed
 #### Security
+
+
+## [1.0.2] - 2016-06-02
+#### Changed
+- Converted to [TypeScript](https://www.typescriptlang.org/).
