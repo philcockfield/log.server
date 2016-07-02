@@ -10,7 +10,3 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Removed
 #### Fixed
 #### Security
-
-## [0.0.1] - YYYY-MM-DD
-#### Added
-Initial creation and publish.
