@@ -1,6 +1,6 @@
-import { expect } from 'chai';
 import log from '../log';
 import { COLORS, METHODS } from '../log';
+import { expect } from 'chai';
 import * as chalk from 'chalk';
 
 
