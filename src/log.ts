@@ -3,22 +3,31 @@ import * as chalk from 'chalk';
 import * as yaml from 'js-yaml';
 import * as R from 'ramda';
 
+export type ILoggable = any;
 
-export interface ILog {
+export interface ILogger {
+  (...items: ILoggable[]): void;
+}
+
+export interface ILogColors {
+  black: ILogger;
+  red: ILogger;
+  green: ILogger;
+  yellow: ILogger;
+  blue: ILogger;
+  magenta: ILogger;
+  cyan: ILogger;
+  white: ILogger;
+  gray: ILogger;
+}
+
+export interface ILogMethod extends ILogColors, ILogger {}
+
+export interface ILog extends ILogColors {
   silent: boolean;
-  info: any;
-  warn: any;
-  error: any;
-  black?: Function;
-  red?: Function;
-  green?: Function;
-  yellow?: Function;
-  blue?: Function;
-  magenta?: Function;
-  cyan?: Function;
-  white?: Function;
-  gray?: Function;
-
+  info: ILogMethod;
+  warn: ILogMethod;
+  error: ILogMethod;
 }
 
 export const COLORS = [
@@ -76,7 +85,7 @@ const format = (level, items) => {
 
 
 
-const logger: any = (level: string, color: string, items: Array<any>) => {
+const logger = (level: string, color: string, items: Array<any>) => {
   if (log.silent) { return; } // Logging suppressed.
   let message = format(level, items);
   if (color !== 'black') {
@@ -95,7 +104,7 @@ export const log: ILog = {
   info,
   warn,
   error,
-};
+} as any;
 
 
 // Apply colors to each method.

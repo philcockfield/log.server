@@ -1,5 +1,5 @@
-import log from '../log';
-import { COLORS, METHODS } from '../log';
+import log from '../src/log';
+import { COLORS, METHODS } from '../src/log';
 import { expect } from 'chai';
 import * as chalk from 'chalk';
 
