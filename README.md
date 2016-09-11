@@ -2,9 +2,9 @@
 A simple and colorful logger abstraction.
 
 
-## Run
-    npm install
-    npm start
+## Install
+    npm install --save js-util-log
+
 
 
 ## Tests
