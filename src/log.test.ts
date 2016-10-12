@@ -1,5 +1,5 @@
 import log from '../src/log';
-import { COLORS, METHODS } from '../src/log';
+import { COLORS, METHODS, ILogger } from '../src/log';
 import { expect } from 'chai';
 import * as chalk from 'chalk';
 
@@ -66,6 +66,16 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
         expect(items[1]).to.contain('foo');
         expect(items[1]).to.contain('bar');
       });
+    });
+  });
+
+
+  it('returns a string from color methods on root log function', async () => {
+    COLORS.forEach(color => {
+      const logColor = log[color] as ILogger;
+      const result = logColor('foo');
+      expect(result.length).to.be.greaterThan('foo'.length);
+      expect(result).to.contain('foo');
     });
   });
 

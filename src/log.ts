@@ -6,7 +6,7 @@ import * as R from 'ramda';
 export type ILoggable = any;
 
 export interface ILogger {
-  (...items: ILoggable[]): void;
+  (...items: ILoggable[]): string;
 }
 
 export interface ILogColors {

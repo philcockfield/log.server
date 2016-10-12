@@ -11,6 +11,7 @@
     "no-console": [false],
     "jsx-no-lambda": true,
     "no-shadowed-variable": false,
-    "ordered-imports": false
+    "ordered-imports": false,
+    "only-arrow-functions": false
   }
 }
