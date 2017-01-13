@@ -57,8 +57,8 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
 
 
   it('has a colors methods for each log method', () => {
-    METHODS.forEach(method => {
-      COLORS.forEach(color => {
+    METHODS.forEach((method) => {
+      COLORS.forEach((color) => {
         expect(log[method][color]).to.be.an.instanceof(Function);
         log[method][color]('abc');
         log[method][color]('foo', 'bar');
@@ -71,7 +71,7 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
 
 
   it('returns a string from color methods on root log function', async () => {
-    COLORS.forEach(color => {
+    COLORS.forEach((color) => {
       const logColor = log[color] as ILogger;
       const result = logColor('foo');
       expect(result.length).to.be.greaterThan('foo'.length);
@@ -81,7 +81,7 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
 
 
   it('exposes raw color methods for formatting', () => {
-    COLORS.forEach(color => {
+    COLORS.forEach((color) => {
       expect(log[color]('foo')).to.equal(chalk[color]('foo'));
     });
   });
@@ -120,5 +120,11 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
     expect(items[0]).to.contain('&ref_0\n');
     expect(items[0]).to.contain('foo \n');
     expect(items[0]).to.contain('foo: 123\n');
+  });
+
+
+  it('logs an empty object {}', () => {
+    log.info('hello', {});
+    fnLog(items);
   });
 });
