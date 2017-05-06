@@ -5,13 +5,13 @@ import * as chalk from 'chalk';
 
 
 
-describe('logging to console (NB: Tests hidden because this mucks with the console)', function() {
-  let items;
-  let fnLog;
+describe('logging to console (NB: Tests hidden because this mucks with the console)', () => {
+  let items: any[];
+  let fnLog: (...values: any[]) => void;
   beforeEach(() => {
     fnLog = console.log;
     items = [];
-    console.log = (value) => items.push(value);
+    console.log = (value: any) => items.push(value);
   });
   afterEach(() => {
     console.log = fnLog;
@@ -92,9 +92,10 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
     log.info(err);
     log.warn(err);
     log.error(err);
-    expect(items[0]).to.contain(err.stack);
-    expect(items[1]).to.contain(err.stack);
-    expect(items[2]).to.contain(err.stack);
+    const stack = err.stack as string;
+    expect(items[0]).to.contain(stack);
+    expect(items[1]).to.contain(stack);
+    expect(items[2]).to.contain(stack);
   });
 
 

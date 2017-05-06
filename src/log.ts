@@ -1,13 +1,9 @@
-/* tslint:disable:no-console */
-import * as chalk from 'chalk';
-import * as yaml from 'js-yaml';
-import * as R from 'ramda';
+import { R, yaml, chalk } from './common';
 
 export type ILoggable = any;
+export type ILogger = (...items: ILoggable[]) => string;
 
-export interface ILogger {
-  (...items: ILoggable[]): string;
-}
+
 
 export interface ILogColors {
   black: ILogger;
@@ -21,7 +17,7 @@ export interface ILogColors {
   gray: ILogger;
 }
 
-export interface ILogMethod extends ILogColors, ILogger {}
+export interface ILogMethod extends ILogColors, ILogger { }
 
 export interface ILog extends ILogColors {
   silent: boolean;
@@ -51,9 +47,9 @@ export const METHODS = [
 
 
 
-const format = (level, items) => {
+const format = (level: string, items: ILoggable[]) => {
   // Convert objects to JSON.
-  items = items.map(item => {
+  items = items.map((item) => {
     if (item instanceof Error) {
       return item.stack;
     }
@@ -62,9 +58,9 @@ const format = (level, items) => {
       // (NB: easy to read, and protects against circular reference).
       const obj = yaml
         .safeDump(item, { indent: 2 })
-        .split('\n').map(line => `  ${ line }`)
+        .split('\n').map((line) => `  ${line}`)
         .join('\n');
-      return `\n${ obj }`;
+      return `\n${obj}`;
     }
     return item;
   });
@@ -85,17 +81,17 @@ const format = (level, items) => {
 
 
 
-const logger = (level: string, color: string, items: Array<any>) => {
+const logger = (level: string, color: string, items: ILoggable[]) => {
   if (log.silent) { return; } // Logging suppressed.
   let message = format(level, items);
   if (color !== 'black') {
     message = chalk[color](message);
   }
-  console.log(message);
+  console.log(message); // tslint:disable-line
 };
-const info: any = (...items) => logger('info', 'black', items);
-const warn: any = (...items) => logger('warn', 'black', items);
-const error: any = (...items) => logger('error', 'black', items);
+const info: any = (...items: ILoggable[]) => logger('info', 'black', items);
+const warn: any = (...items: ILoggable[]) => logger('warn', 'black', items);
+const error: any = (...items: ILoggable[]) => logger('error', 'black', items);
 
 
 
@@ -108,16 +104,15 @@ export const log: ILog = {
 
 
 // Apply colors to each method.
-const applyMethodColors = (level, obj) => {
-  COLORS.forEach(color => {
-    obj[color] = (...items) => logger(level, color, items);
+const applyMethodColors = (level: string, obj: any) => {
+  COLORS.forEach((color) => {
+    obj[color] = (...items: ILoggable[]) => logger(level, color, items);
   });
-
 };
-METHODS.forEach(level => applyMethodColors(level, log[level]));
+METHODS.forEach((level) => applyMethodColors(level, log[level]));
 
 // Attach color helpers to the log.
-COLORS.forEach(color => {
+COLORS.forEach((color) => {
   log[color] = chalk[color];
 });
 

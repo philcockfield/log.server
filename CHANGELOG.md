@@ -13,6 +13,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 
+## [2.0.0] - 2017-04-06
+#### Changed
+- Updated to latest TS configuration.
+- Renamed from `js-util-log` to `log.server`.
+
+
+
 ## [1.0.4] - 2016-10-12
 #### Changed
 - Log colors (eg. `log.blue(...)`) return strongly typed strings. 
