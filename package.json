@@ -1,5 +1,5 @@
 {
-  "name": "js-util-log",
+  "name": "log.server",
   "version": "1.0.4",
   "description": "A simple and colorful logger abstraction.",
   "main": "./lib/log.js",
@@ -31,7 +31,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "github.com/philcockfield/js-util-log"
+    "url": "github.com/philcockfield/log.server"
   },
   "keywords": [],
   "author": {
@@ -39,6 +39,6 @@
     "email": "phil@cockfield.net",
     "url": "https://github.com/philcockfield/modules"
   },
-  "homepage": "github.com/philcockfield/js-util-log",
+  "homepage": "github.com/philcockfield/log.server",
   "license": "MIT"
 }
