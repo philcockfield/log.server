@@ -1,9 +1,6 @@
-import log from '../src/log';
-import { COLORS, METHODS, ILogger } from '../src/log';
+import { log, COLORS, METHODS, ILogger } from '../src/log';
 import { expect } from 'chai';
-import * as chalk from 'chalk';
-
-
+import { chalk } from './common';
 
 describe('logging to console (NB: Tests hidden because this mucks with the console)', () => {
   let items: any[];
@@ -18,17 +15,14 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
     log.silent = false;
   });
 
-
-
   it('logs a single value', () => {
     log.info('info');
     log.warn('warn');
     log.error('error');
     expect(items[0]).to.equal('info');
-    expect(items[1]).to.equal('warn');
+    expect(items[1]).to.contain('warn');
     expect(items[2]).to.contain('error');
   });
-
 
   it('logs multiple parameter values', () => {
     log.info('my', 'info');
@@ -36,16 +30,13 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
     log.error('my', 'error');
 
     expect(items[0]).to.equal('my info');
-    expect(items[1]).to.equal('my warn');
+    expect(items[1]).to.contain('my warn');
     expect(items[2]).to.contain('my error');
   });
-
-
 
   it('is not silent by default', () => {
     expect(log.silent).to.equal(false);
   });
-
 
   it('does not log when silent', () => {
     log.silent = true;
@@ -55,10 +46,9 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
     expect(items).to.eql([]);
   });
 
-
   it('has a colors methods for each log method', () => {
-    METHODS.forEach((method) => {
-      COLORS.forEach((color) => {
+    METHODS.forEach(method => {
+      COLORS.forEach(color => {
         expect(log[method][color]).to.be.an.instanceof(Function);
         log[method][color]('abc');
         log[method][color]('foo', 'bar');
@@ -69,9 +59,8 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
     });
   });
 
-
   it('returns a string from color methods on root log function', async () => {
-    COLORS.forEach((color) => {
+    COLORS.forEach(color => {
       const logColor = log[color] as ILogger;
       const result = logColor('foo');
       expect(result.length).to.be.greaterThan('foo'.length);
@@ -79,50 +68,24 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
     });
   });
 
-
   it('exposes raw color methods for formatting', () => {
-    COLORS.forEach((color) => {
+    COLORS.forEach(color => {
       expect(log[color]('foo')).to.equal(chalk[color]('foo'));
     });
   });
 
-
   it('logs an error stack from all methods', () => {
     const err = new Error('Foo');
     log.info(err);
-    log.warn(err);
-    log.error(err);
     const stack = err.stack as string;
     expect(items[0]).to.contain(stack);
-    expect(items[1]).to.contain(stack);
-    expect(items[2]).to.contain(stack);
   });
-
 
   it('converts errors to red', () => {
     const red = chalk.red('red');
     log.error('red');
     expect(items[0]).to.equal(red);
   });
-
-
-  it('converts object to YAML string (with circular reference)', () => {
-    const obj: any = {
-      foo: 123,
-      bar: {
-        one: 1,
-        two: 2,
-      },
-      array: [1, 2, 3],
-    };
-    const ref = { obj };
-    obj.circular = ref;
-    log.info('foo', obj);
-    expect(items[0]).to.contain('&ref_0\n');
-    expect(items[0]).to.contain('foo \n');
-    expect(items[0]).to.contain('foo: 123\n');
-  });
-
 
   it('logs an empty object {}', () => {
     log.info('hello', {});

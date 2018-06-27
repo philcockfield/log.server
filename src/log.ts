@@ -1,30 +1,9 @@
-import { R, yaml, chalk } from './common';
+import * as nodeUtil from 'util';
+import { R, chalk } from './common';
+import { ILoggable, ILog, ILogLevels, ILogTableOptions } from './types';
+import { table } from './log.table';
 
-export type ILoggable = any;
-export type ILogger = (...items: ILoggable[]) => string;
-
-
-
-export interface ILogColors {
-  black: ILogger;
-  red: ILogger;
-  green: ILogger;
-  yellow: ILogger;
-  blue: ILogger;
-  magenta: ILogger;
-  cyan: ILogger;
-  white: ILogger;
-  gray: ILogger;
-}
-
-export interface ILogMethod extends ILogColors, ILogger { }
-
-export interface ILog extends ILogColors {
-  silent: boolean;
-  info: ILogMethod;
-  warn: ILogMethod;
-  error: ILogMethod;
-}
+export * from './types';
 
 export const COLORS = [
   'black',
@@ -38,85 +17,81 @@ export const COLORS = [
   'gray',
 ];
 
-export const METHODS = [
-  'info',
-  'warn',
-  'error',
-];
-
-
-
+export const METHODS = ['info', 'warn', 'error'];
 
 const format = (level: string, items: ILoggable[]) => {
+  const levelColor = (item: any) => {
+    switch (level) {
+      case 'warn':
+        return chalk.yellow(item);
+      case 'error':
+        return chalk.red(item);
+      default:
+        return item;
+    }
+  };
+
   // Convert objects to JSON.
-  items = items.map((item) => {
+  items = items.map(item => {
     if (item instanceof Error) {
       return item.stack;
     }
     if (R.is(Object, item)) {
-      // Convert object to YAML string
-      // (NB: easy to read, and protects against circular reference).
-      const obj = yaml
-        .safeDump(item, { indent: 2 })
-        .split('\n').map((line) => `  ${line}`)
-        .join('\n');
-      return `\n${obj}`;
+      // Object formatted with colors (JSON).
+      return nodeUtil.inspect(item, false, undefined, true);
     }
     return item;
   });
 
   // Convert to final string.
-  let output = items.join(' ');
+  const output = items.join(' ');
 
   // Perform level specific transformations.
-  switch (level) {
-    // Turn errors to red text.
-    case 'error': output = chalk.red(output); break;
-    default:
-  }
 
   // Finish up.
-  return output;
+  return levelColor(output);
 };
 
-
-
 const logger = (level: string, color: string, items: ILoggable[]) => {
-  if (log.silent) { return; } // Logging suppressed.
+  if (log.silent) {
+    return; // Logging suppressed.
+  }
   let message = format(level, items);
   if (color !== 'black') {
     message = chalk[color](message);
   }
   console.log(message); // tslint:disable-line
 };
+const clear = () => console.clear(); // tslint:disable-line
+
 const info: any = (...items: ILoggable[]) => logger('info', 'black', items);
 const warn: any = (...items: ILoggable[]) => logger('warn', 'black', items);
 const error: any = (...items: ILoggable[]) => logger('error', 'black', items);
 
-
-
-export const log: ILog = {
-  silent: false,
+const levelsLog: ILogLevels = {
   info,
   warn,
   error,
-} as any;
+};
 
+export const log: ILog = {
+  ...levelsLog,
+  silent: false,
+  clear,
+  table: (options?: ILogTableOptions) => table(levelsLog, options),
+} as any;
 
 // Apply colors to each method.
 const applyMethodColors = (level: string, obj: any) => {
-  COLORS.forEach((color) => {
+  COLORS.forEach(color => {
     obj[color] = (...items: ILoggable[]) => logger(level, color, items);
   });
 };
-METHODS.forEach((level) => applyMethodColors(level, log[level]));
+METHODS.forEach(level => applyMethodColors(level, log[level]));
 
 // Attach color helpers to the log.
-COLORS.forEach((color) => {
+COLORS.forEach(color => {
   log[color] = chalk[color];
 });
-
-
-
 
 export default log;
