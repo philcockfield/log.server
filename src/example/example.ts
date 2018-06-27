@@ -28,4 +28,5 @@ colors:
 log.info(colors);
 
 log.info('object', { foo: 123 });
+log.info({ foo: 123 });
 log.info();

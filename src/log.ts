@@ -1,4 +1,5 @@
-import { R, yaml, chalk } from './common';
+import { R, chalk } from './common';
+import * as nodeUtil from 'util';
 
 export type ILoggable = any;
 export type ILogger = (...items: ILoggable[]) => string;
@@ -40,46 +41,42 @@ export const COLORS = [
 export const METHODS = ['info', 'warn', 'error'];
 
 const format = (level: string, items: ILoggable[]) => {
+  const levelColor = (item: any) => {
+    switch (level) {
+      case 'warn':
+        return chalk.yellow(item);
+      case 'error':
+        return chalk.red(item);
+      default:
+        return item;
+    }
+  };
+
   // Convert objects to JSON.
   items = items.map(item => {
     if (item instanceof Error) {
       return item.stack;
     }
     if (R.is(Object, item)) {
-      // Convert object to YAML string
-      // (NB: easy to read, and protects against circular reference).
-      const obj = yaml
-        .safeDump(item, { indent: 2 })
-        .split('\n')
-        .map(line => `  ${line}`)
-        .join('\n');
-      return `\n${obj}`;
+      // Object formatted with colors (JSON).
+      return nodeUtil.inspect(item, false, undefined, true);
     }
     return item;
   });
 
   // Convert to final string.
-  let output = items.join(' ');
+  const output = items.join(' ');
 
   // Perform level specific transformations.
-  switch (level) {
-    case 'warn':
-      output = chalk.yellow(output);
-      break;
-    case 'error':
-      output = chalk.red(output);
-      break;
-    default:
-  }
 
   // Finish up.
-  return output;
+  return levelColor(output);
 };
 
 const logger = (level: string, color: string, items: ILoggable[]) => {
   if (log.silent) {
-    return;
-  } // Logging suppressed.
+    return; // Logging suppressed.
+  }
   let message = format(level, items);
   if (color !== 'black') {
     message = chalk[color](message);

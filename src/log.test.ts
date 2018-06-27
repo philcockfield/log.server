@@ -87,23 +87,6 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
     expect(items[0]).to.equal(red);
   });
 
-  it('converts object to YAML string (with circular reference)', () => {
-    const obj: any = {
-      foo: 123,
-      bar: {
-        one: 1,
-        two: 2,
-      },
-      array: [1, 2, 3],
-    };
-    const ref = { obj };
-    obj.circular = ref;
-    log.info('foo', obj);
-    expect(items[0]).to.contain('&ref_0\n');
-    expect(items[0]).to.contain('foo \n');
-    expect(items[0]).to.contain('foo: 123\n');
-  });
-
   it('logs an empty object {}', () => {
     log.info('hello', {});
     fnLog(items);
