@@ -64,6 +64,10 @@ const format = (level: string, items: ILoggable[]) => {
   // Perform level specific transformations.
   switch (level) {
     // Turn errors to red text.
+    case 'warn':
+      output = chalk.yellow(output);
+      break;
+
     case 'error':
       output = chalk.red(output);
       break;
