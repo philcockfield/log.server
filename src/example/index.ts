@@ -1,4 +1,7 @@
 import log from '../log';
 
-log.info('Info');
+log.info('info');
+log.warn('warn');
+log.error('error');
+
 log.info();

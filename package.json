@@ -6,11 +6,11 @@
   "typings": "./lib/log.d.ts",
   "scripts": {
     "example": "node ./lib/example",
-    "test": "sh sh/test.sh",
-    "tdd": "yarn run test -- --reporter min --watch",
-    "lint": "node node_modules/tslint/bin/tslint 'src/**/*.ts{,x}' --format verbose",
-    "build": "rm -rf ./lib && node node_modules/typescript/bin/tsc",
-    "prepublish": "yarn run lint && yarn test && yarn run build"
+    "test": "sh ./node_modules/@tdb/test/sh/test.sh",
+    "tdd": "yarn run test --reporter min --watch",
+    "lint": "sh ./node_modules/@tdb/typescript/sh/lint.sh",
+    "build": "sh ./node_modules/@tdb/typescript/sh/build.sh",
+    "prepare": "yarn run lint && yarn test && yarn run build"
   },
   "dependencies": {
     "@tdb/test": "^1.1.6",

@@ -41,7 +41,7 @@ export const METHODS = ['info', 'warn', 'error'];
 
 const format = (level: string, items: ILoggable[]) => {
   // Convert objects to JSON.
-  items = items.map((item) => {
+  items = items.map(item => {
     if (item instanceof Error) {
       return item.stack;
     }
@@ -51,7 +51,7 @@ const format = (level: string, items: ILoggable[]) => {
       const obj = yaml
         .safeDump(item, { indent: 2 })
         .split('\n')
-        .map((line) => `  ${line}`)
+        .map(line => `  ${line}`)
         .join('\n');
       return `\n${obj}`;
     }
@@ -100,14 +100,14 @@ export const log: ILog = {
 
 // Apply colors to each method.
 const applyMethodColors = (level: string, obj: any) => {
-  COLORS.forEach((color) => {
+  COLORS.forEach(color => {
     obj[color] = (...items: ILoggable[]) => logger(level, color, items);
   });
 };
-METHODS.forEach((level) => applyMethodColors(level, log[level]));
+METHODS.forEach(level => applyMethodColors(level, log[level]));
 
 // Attach color helpers to the log.
-COLORS.forEach((color) => {
+COLORS.forEach(color => {
   log[color] = chalk[color];
 });
 
