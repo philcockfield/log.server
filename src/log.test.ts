@@ -1,6 +1,6 @@
 import { log, COLORS, METHODS, ILogger } from '../src/log';
 import { expect } from 'chai';
-import * as chalk from 'chalk';
+import { chalk } from './common';
 
 describe('logging to console (NB: Tests hidden because this mucks with the console)', () => {
   let items: any[];
@@ -20,7 +20,7 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
     log.warn('warn');
     log.error('error');
     expect(items[0]).to.equal('info');
-    expect(items[1]).to.equal('warn');
+    expect(items[1]).to.contain('warn');
     expect(items[2]).to.contain('error');
   });
 
@@ -30,7 +30,7 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
     log.error('my', 'error');
 
     expect(items[0]).to.equal('my info');
-    expect(items[1]).to.equal('my warn');
+    expect(items[1]).to.contain('my warn');
     expect(items[2]).to.contain('my error');
   });
 
@@ -77,12 +77,8 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
   it('logs an error stack from all methods', () => {
     const err = new Error('Foo');
     log.info(err);
-    log.warn(err);
-    log.error(err);
     const stack = err.stack as string;
     expect(items[0]).to.contain(stack);
-    expect(items[1]).to.contain(stack);
-    expect(items[2]).to.contain(stack);
   });
 
   it('converts errors to red', () => {

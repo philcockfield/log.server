@@ -1,5 +1,12 @@
 import log from '../log';
 
+const err = new Error('Foo');
+log.info(err);
+log.warn(err);
+log.error(err);
+
+log.info();
+
 log.info();
 log.info('info');
 log.warn('warn');
@@ -21,5 +28,4 @@ colors:
 log.info(colors);
 
 log.info('object', { foo: 123 });
-
 log.info();

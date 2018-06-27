@@ -69,7 +69,9 @@ const format = (level: string, items: ILoggable[]) => {
       break;
 
     case 'error':
+      // chalk.red.
       output = chalk.red(output);
+      // const f = chalk.default.red
       break;
     default:
   }
