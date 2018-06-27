@@ -12,7 +12,7 @@ log.info('info');
 log.warn('warn');
 log.error('error');
 
-const colors = `
+log.info(`
 colors:
   ${log.black('black')}
   ${log.blue('blue')}
@@ -23,10 +23,17 @@ colors:
   ${log.red('red')}
   ${log.white('white')}
   ${log.yellow('yellow')}
-
-`;
-log.info(colors);
+`);
 
 log.info('object', { foo: 123 });
 log.info({ foo: 123 });
 log.info();
+
+log
+  .table({
+    head: ['key', 'value'],
+    colWidths: [10, 25],
+  })
+  .add(['foo', log.green(123)])
+  .add([log.magenta('bar'), 456])
+  .log();

@@ -1,30 +1,9 @@
-import { R, chalk } from './common';
 import * as nodeUtil from 'util';
+import { R, chalk } from './common';
+import { ILoggable, ILog, ILogLevels, ILogTableOptions } from './types';
+import { table } from './log.table';
 
-export type ILoggable = any;
-export type ILogger = (...items: ILoggable[]) => string;
-
-export interface ILogColors {
-  black: ILogger;
-  red: ILogger;
-  green: ILogger;
-  yellow: ILogger;
-  blue: ILogger;
-  magenta: ILogger;
-  cyan: ILogger;
-  white: ILogger;
-  gray: ILogger;
-}
-
-export interface ILogMethod extends ILogColors, ILogger {}
-
-export interface ILog extends ILogColors {
-  silent: boolean;
-  info: ILogMethod;
-  warn: ILogMethod;
-  error: ILogMethod;
-  clear: () => void;
-}
+export * from './types';
 
 export const COLORS = [
   'black',
@@ -89,12 +68,17 @@ const info: any = (...items: ILoggable[]) => logger('info', 'black', items);
 const warn: any = (...items: ILoggable[]) => logger('warn', 'black', items);
 const error: any = (...items: ILoggable[]) => logger('error', 'black', items);
 
-export const log: ILog = {
-  silent: false,
+const levelsLog: ILogLevels = {
   info,
   warn,
   error,
+};
+
+export const log: ILog = {
+  ...levelsLog,
+  silent: false,
   clear,
+  table: (options?: ILogTableOptions) => table(levelsLog, options),
 } as any;
 
 // Apply colors to each method.
