@@ -5,6 +5,7 @@
   "main": "./lib/log.js",
   "typings": "./lib/log.d.ts",
   "scripts": {
+    "example": "node ./lib/example",
     "test": "sh sh/test.sh",
     "tdd": "yarn run test -- --reporter min --watch",
     "lint": "node node_modules/tslint/bin/tslint 'src/**/*.ts{,x}' --format verbose",
@@ -12,20 +13,17 @@
     "prepublish": "yarn run lint && yarn test && yarn run build"
   },
   "dependencies": {
-    "chalk": "^1.1.3",
-    "js-yaml": "^3.6.1",
-    "ramda": "^0.23.0"
+    "@tdb/test": "^1.1.6",
+    "@tdb/typescript": "^2.8.1",
+    "chalk": "1.1.3",
+    "cli-table": "0.3.1",
+    "js-yaml": "3.12.0",
+    "ramda": "0.25.0"
   },
   "devDependencies": {
-    "@types/chai": "^3.4.34",
-    "@types/chalk": "^0.4.30",
-    "@types/js-yaml": "^3.5.28",
-    "@types/mocha": "^2.2.32",
-    "@types/node": "^7.0.18",
-    "@types/ramda": "0.0.8",
-    "chai": "^3.5.0",
-    "js-typescript": "^2.3.1",
-    "mocha": "^3.1.2"
+    "@types/chalk": "0.4.30",
+    "@types/js-yaml": "3.11.1",
+    "@types/ramda": "0.25.34"
   },
   "repository": {
     "type": "git",

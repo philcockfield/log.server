@@ -1,9 +1,6 @@
-import log from '../src/log';
-import { COLORS, METHODS, ILogger } from '../src/log';
+import { log, COLORS, METHODS, ILogger } from '../src/log';
 import { expect } from 'chai';
 import * as chalk from 'chalk';
-
-
 
 describe('logging to console (NB: Tests hidden because this mucks with the console)', () => {
   let items: any[];
@@ -18,8 +15,6 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
     log.silent = false;
   });
 
-
-
   it('logs a single value', () => {
     log.info('info');
     log.warn('warn');
@@ -28,7 +23,6 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
     expect(items[1]).to.equal('warn');
     expect(items[2]).to.contain('error');
   });
-
 
   it('logs multiple parameter values', () => {
     log.info('my', 'info');
@@ -40,12 +34,9 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
     expect(items[2]).to.contain('my error');
   });
 
-
-
   it('is not silent by default', () => {
     expect(log.silent).to.equal(false);
   });
-
 
   it('does not log when silent', () => {
     log.silent = true;
@@ -54,7 +45,6 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
     log.error(3);
     expect(items).to.eql([]);
   });
-
 
   it('has a colors methods for each log method', () => {
     METHODS.forEach((method) => {
@@ -69,7 +59,6 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
     });
   });
 
-
   it('returns a string from color methods on root log function', async () => {
     COLORS.forEach((color) => {
       const logColor = log[color] as ILogger;
@@ -79,13 +68,11 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
     });
   });
 
-
   it('exposes raw color methods for formatting', () => {
     COLORS.forEach((color) => {
       expect(log[color]('foo')).to.equal(chalk[color]('foo'));
     });
   });
-
 
   it('logs an error stack from all methods', () => {
     const err = new Error('Foo');
@@ -98,13 +85,11 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
     expect(items[2]).to.contain(stack);
   });
 
-
   it('converts errors to red', () => {
     const red = chalk.red('red');
     log.error('red');
     expect(items[0]).to.equal(red);
   });
-
 
   it('converts object to YAML string (with circular reference)', () => {
     const obj: any = {
@@ -122,7 +107,6 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
     expect(items[0]).to.contain('foo \n');
     expect(items[0]).to.contain('foo: 123\n');
   });
-
 
   it('logs an empty object {}', () => {
     log.info('hello', {});

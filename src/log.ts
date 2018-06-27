@@ -3,8 +3,6 @@ import { R, yaml, chalk } from './common';
 export type ILoggable = any;
 export type ILogger = (...items: ILoggable[]) => string;
 
-
-
 export interface ILogColors {
   black: ILogger;
   red: ILogger;
@@ -17,13 +15,14 @@ export interface ILogColors {
   gray: ILogger;
 }
 
-export interface ILogMethod extends ILogColors, ILogger { }
+export interface ILogMethod extends ILogColors, ILogger {}
 
 export interface ILog extends ILogColors {
   silent: boolean;
   info: ILogMethod;
   warn: ILogMethod;
   error: ILogMethod;
+  clear: () => void;
 }
 
 export const COLORS = [
@@ -38,14 +37,7 @@ export const COLORS = [
   'gray',
 ];
 
-export const METHODS = [
-  'info',
-  'warn',
-  'error',
-];
-
-
-
+export const METHODS = ['info', 'warn', 'error'];
 
 const format = (level: string, items: ILoggable[]) => {
   // Convert objects to JSON.
@@ -58,7 +50,8 @@ const format = (level: string, items: ILoggable[]) => {
       // (NB: easy to read, and protects against circular reference).
       const obj = yaml
         .safeDump(item, { indent: 2 })
-        .split('\n').map((line) => `  ${line}`)
+        .split('\n')
+        .map((line) => `  ${line}`)
         .join('\n');
       return `\n${obj}`;
     }
@@ -71,7 +64,9 @@ const format = (level: string, items: ILoggable[]) => {
   // Perform level specific transformations.
   switch (level) {
     // Turn errors to red text.
-    case 'error': output = chalk.red(output); break;
+    case 'error':
+      output = chalk.red(output);
+      break;
     default:
   }
 
@@ -79,29 +74,29 @@ const format = (level: string, items: ILoggable[]) => {
   return output;
 };
 
-
-
 const logger = (level: string, color: string, items: ILoggable[]) => {
-  if (log.silent) { return; } // Logging suppressed.
+  if (log.silent) {
+    return;
+  } // Logging suppressed.
   let message = format(level, items);
   if (color !== 'black') {
     message = chalk[color](message);
   }
   console.log(message); // tslint:disable-line
 };
+const clear = () => console.clear(); // tslint:disable-line
+
 const info: any = (...items: ILoggable[]) => logger('info', 'black', items);
 const warn: any = (...items: ILoggable[]) => logger('warn', 'black', items);
 const error: any = (...items: ILoggable[]) => logger('error', 'black', items);
-
-
 
 export const log: ILog = {
   silent: false,
   info,
   warn,
   error,
+  clear,
 } as any;
-
 
 // Apply colors to each method.
 const applyMethodColors = (level: string, obj: any) => {
@@ -115,8 +110,5 @@ METHODS.forEach((level) => applyMethodColors(level, log[level]));
 COLORS.forEach((color) => {
   log[color] = chalk[color];
 });
-
-
-
 
 export default log;
