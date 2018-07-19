@@ -1,4 +1,4 @@
-import log from '../log';
+import log from '..';
 
 const err = new Error('Foo');
 log.info(err);

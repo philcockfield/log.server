@@ -1,8 +1,22 @@
+import { Observable } from './common';
+
 /**
  * Log
  */
 export type ILoggable = any;
 export type ILogger = (...items: ILoggable[]) => string;
+
+export type LogEvent = {
+  items: ILoggable[];
+  level: LogLevel;
+  color: string;
+  output: string;
+};
+
+export type Logger = {
+  next: (level: LogLevel, color: string, items: ILoggable[]) => string;
+  events$: Observable<LogEvent>;
+};
 
 export interface ILogColors {
   black: ILogger;
@@ -24,7 +38,10 @@ export interface ILogLevels {
   error: ILogMethod;
 }
 
+export type LogLevel = 'info' | 'warn' | 'error';
+
 export interface ILog extends ILogColors, ILogLevels {
+  events$: Observable<LogEvent>;
   silent: boolean;
   clear: () => void;
   table(options?: ILogTableOptions): ILogTable;

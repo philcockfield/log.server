@@ -1,6 +1,8 @@
-import { log, COLORS, METHODS, ILogger } from '..';
+import { log, ILogger } from '..';
 import { expect } from 'chai';
-import { chalk } from '../common';
+import { chalk, LogEvent, constants } from '../common';
+
+const { COLORS, METHODS } = constants;
 
 describe('logging to console (NB: Tests hidden because this mucks with the console)', () => {
   let items: any[];
@@ -44,6 +46,18 @@ describe('logging to console (NB: Tests hidden because this mucks with the conso
     log.warn(2);
     log.error(3);
     expect(items).to.eql([]);
+  });
+
+  it('fires log events from observable', () => {
+    const events: LogEvent[] = [];
+    log.events$.subscribe(e => events.push(e));
+    log.info(1);
+    expect(events.length).to.eql(1);
+    const event = events[0];
+    expect(event.level).to.eql('info');
+    expect(event.color).to.eql('black');
+    expect(event.items).to.eql([1]);
+    expect(event.output).to.eql('1');
   });
 
   it('has a colors methods for each log method', () => {
