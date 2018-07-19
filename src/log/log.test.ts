@@ -1,6 +1,6 @@
-import { log, COLORS, METHODS, ILogger } from '../src/log';
+import { log, COLORS, METHODS, ILogger } from '..';
 import { expect } from 'chai';
-import { chalk } from './common';
+import { chalk } from '../common';
 
 describe('logging to console (NB: Tests hidden because this mucks with the console)', () => {
   let items: any[];

@@ -1,9 +1,9 @@
 import * as nodeUtil from 'util';
-import { R, chalk } from './common';
-import { ILoggable, ILog, ILogLevels, ILogTableOptions } from './types';
+import { R, chalk } from '../common';
+import { ILoggable, ILog, ILogLevels, ILogTableOptions } from '../types';
 import { table } from './log.table';
 
-export * from './types';
+// export * from './types';
 
 export const COLORS = [
   'black',

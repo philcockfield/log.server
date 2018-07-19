@@ -1,5 +1,5 @@
-import { compact } from './common';
-import { ILogLevels, ILogTable, ILogTableOptions } from './types';
+import { compact } from '../common';
+import { ILogLevels, ILogTable, ILogTableOptions } from '../types';
 
 const Table = require('cli-table');
 
