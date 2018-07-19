@@ -25,8 +25,8 @@ colors:
   ${log.yellow('yellow')}
 `);
 
-log.info('object', { foo: 123 });
-log.info({ foo: 123 });
+log.info('object', { foo: 123, text: 'hello' });
+log.info({ foo: 123, text: 'hello' });
 log.info();
 
 log
